@@ -49,7 +49,7 @@ export default async function DashboardBlocks() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-8">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total revenue</CardTitle>
+                    <CardTitle className="text-sm font-medium">کل درآمد</CardTitle>
                     <DollarSign className="size-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -57,37 +57,37 @@ export default async function DashboardBlocks() {
                         amount: data.reduce((acc,  invoice) => acc + invoice.total,0), 
                         currency: 'USD'
                     })}</h2>
-                    <p className="text-xs text-muted-foreground">Based on the last 30 days</p>
+                    <p className="text-xs text-muted-foreground">بر اساس 30 روز اخیر</p>
                 </CardContent>
             </Card>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total Invoices Issued</CardTitle>
+                    <CardTitle className="text-sm font-medium">کل صورت‌حساب ها</CardTitle>
                     <Users className="size-4 text-muted-foreground"/>
                 </CardHeader>
                 <CardContent>
-                    <h2 className="text-2xl font-bold">+{data.length}</h2>
-                    <p className="text-xs text-muted-foreground">Total invoices Issued!</p>
+                    <h2 className="text-2xl font-bold">{data.length}+</h2>
+                    <p className="text-xs text-muted-foreground">صورت حساب داشتیم</p>
                 </CardContent>
             </Card>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Paid Invoices</CardTitle>
+                    <CardTitle className="text-sm font-medium">صورت‌حساب بسته</CardTitle>
                     <CreditCard className="size-4 text-muted-foreground"/>
                 </CardHeader>
                 <CardContent>
-                    <h2 className="text-2xl font-bold">+{paidinvoices.length}</h2>
-                    <p className="text-xs text-muted-foreground">Total Invoices which have been paid!</p>
+                    <h2 className="text-2xl font-bold">{paidinvoices.length}+</h2>
+                    <p className="text-xs text-muted-foreground">صورت‌حساب پرداخت شده</p>
                 </CardContent>
             </Card>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Pending Invoices</CardTitle>
+                    <CardTitle className="text-sm font-medium">صورت‌حساب باز</CardTitle>
                     <Activity  className="size-4 text-muted-foreground"/>
                 </CardHeader>
                 <CardContent>
-                    <h2 className="text-2xl font-bold">+{openInvoices.length}</h2>
-                    <p className="text-xs text-muted-foreground">Invoices which are currently pending!</p>
+                    <h2 className="text-2xl font-bold">{openInvoices.length}+</h2>
+                    <p className="text-xs text-muted-foreground">صورت‌حساب هنوز پرداخت نشده</p>
                 </CardContent>
             </Card>
         </div>

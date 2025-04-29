@@ -14,7 +14,8 @@ interface iAppProps {
 export function InvoiceActions({ id , status} : iAppProps) { 
 
     const handleSetReminder = async () => {
-        toast.promise(fetch(`/api/email/${id}` , {
+        toast.promise(
+            fetch(`/api/email/${id}` , {
             method: "POST", 
             headers: {
                 "Content-Type" : "application/json"
@@ -34,28 +35,28 @@ export function InvoiceActions({ id , status} : iAppProps) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
                     <Link href={`/dashboard/invoices/${id}`}>
-                        <Pencil className="size-4 mr-2"/> Edit Invoice
+                        <Pencil className="size-4 mr-2"/> ویرایش صورت‌حساب
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
                     <Link href={`/api/invoice/${id}`} target="_blank">
-                        <DownloadCloudIcon className="size-4 mr-2"/> Download Invoice
+                        <DownloadCloudIcon className="size-4 mr-2"/> دانلود صورت‌حساب
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSetReminder}>
-                        <Mail className="size-4 mr-2"/> Reminder Email
+                <DropdownMenuItem onClick={handleSetReminder} className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
+                        <Mail className="size-4 mr-2"/> ارسال ایمیل یاد‌آوری
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
                     <Link href={`/dashboard/invoices/${id}/delete`}>
-                        <Trash className="size-4 mr-2"/> Delete Invoice
+                    <Trash className="size-4 mr-2"/>  حذف صورت‌حساب
                     </Link>
                 </DropdownMenuItem>
                 {
-                    status !== "PAID" && <DropdownMenuItem asChild>
+                    status !== "PAID" && <DropdownMenuItem asChild className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
                     <Link href={`/dashboard/invoices/${id}/paid`}>
-                        <CheckCircle className="size-4 mr-2"/> Mark as Paid
+                        <CheckCircle className="size-4 mr-2"/> پرداخت شده
                     </Link>
                 </DropdownMenuItem>
                 }

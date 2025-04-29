@@ -13,14 +13,14 @@ export default function Verify() {
                     <div className="mb-4 mx-auto flex size-20 items-center justify-center rounded-full bg-blue-100">
                         <Mail className="size-12 text-blue-500"/>
                     </div>
-                    <CardTitle className="text-2xl font-bold">Check your Email</CardTitle>
-                    <CardDescription>We have sent a verification link to your email address</CardDescription>
+                    <CardTitle className="text-2xl font-bold">ایمیل خود را بررسی کنید</CardTitle>
+                    <CardDescription>ما یک لینک برای احراز هویت به ایمیل تون فرستادیم</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="mt-4 rounded-md bg-yellow-50 border-yellow-300 p-4">
-                        <div className="flex items-center">
+                        <div className="flex items-center justify-center gap-1">
                             <AlertCircle className="size-5 text-yellow-400"/>
-                            <p className="text-sm font-medium text-yellow-700 ml-3">Be sure to check your spam folder!</p>
+                            <p className="text-sm font-medium text-yellow-700 ml-3">حتما هرزنامه هم بررسی کنید!</p>
                         </div>
                     </div>
                 </CardContent>
@@ -31,7 +31,7 @@ export default function Verify() {
                         className: "w-full", 
                         variant: "outline"
                     })}>
-                        <ArrowLeft className="size-4 mr-2"/> Back to Homepage
+                        <ArrowLeft className="size-4 mr-2"/> ایمیل خود را اشتباه وارد کردید؟
                     </Link>
                 </CardFooter>
             </Card>

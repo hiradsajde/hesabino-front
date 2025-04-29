@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/persian-calendar";
+import { format } from "date-fns-jalali";
+
 import {
   Select,
   SelectContent,
@@ -18,7 +21,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
 import { useActionState, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "./SubmitButtons";
@@ -27,6 +29,7 @@ import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { invoiceSchema } from "../utils/zodSchemas";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatError } from "../utils/formatError";
 
 interface iAppProps {
   firstName: string; 
@@ -48,6 +51,7 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
     shouldRevalidate: "onInput",
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDueDate, setSelectedDueDate] = useState(new Date());
   const [rate, setRate] = useState("")
   const [quantity, setQuantity] = useState("")
   const [currency , setCurrency] = useState("USD")
@@ -63,25 +67,30 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
                 value={selectedDate.toISOString()}
             />
             <input
+                type="hidden" 
+                name={fields.dueDate.name} 
+                value={selectedDueDate.toISOString()}
+            />
+            <input
               type="hidden"
               name={fields.total.name} 
               value={calculateTotal} 
             />
           <div className="p-6 flex flex-col mb-2">
             <div className="flex items-center w-fit gap-4">
-              <Badge variant="secondary">Draft</Badge>
-              <Input
+            <Badge variant="secondary">پیش‌نویس</Badge>
+            <Input
                 name={fields.invoiceName.name}
                 key={fields.invoiceName.key}
                 defaultValue={fields.invoiceName.initialValue}
-                placeholder="Test 123"
+                placeholder="تست 123"
               />
             </div>
-            <p className="text-sm text-red-500">{fields.invoiceName.errors}</p>
+            <p className="text-sm text-red-500">{formatError(fields.invoiceName.errors)}</p>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <Label>Invoice No.</Label>
+                <Label>شماره صورت‌حساب</Label>
                 <div className="flex">
                   <span className="px-3 border border-r-0 rounded-l-md bg-muted flex items-center">
                     #
@@ -94,10 +103,10 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
                     defaultValue={fields.invoiceNumber.initialValue}
                   />
                 </div>
-                <p className="text-red-500 text-sm">{fields.invoiceNumber.errors}</p>
+                <p className="text-red-500 text-sm">{formatError(fields.invoiceNumber.errors)}</p>
               </div>
               <div>
-                <Label>Currency</Label>
+                <Label>ارز مبنا</Label>
                 <Select 
                     defaultValue="USD" 
                     name={fields.currency.name} 
@@ -105,69 +114,69 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
                     onValueChange={(value) => setCurrency(value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Currency" />
+                    <SelectValue placeholder="ارز انتخاب کنید" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="USD">
-                      United States Dollas
+                      دلار آمریکا
                     </SelectItem>
-                    <SelectItem value="EUR">Euro</SelectItem>
+                    <SelectItem value="EUR">یورو</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-red-500 text-sm">{fields.currency.errors}</p>
+                <p className="text-red-500 text-sm">{formatError(fields.currency.errors)}</p>
               </div>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label>From</Label>
+                <Label>از</Label>
                 <div className="space-y-2">
                   <Input 
                     name={fields.fromName.name} 
                     key={fields.fromName.key} 
-                    placeholder="Your Name" 
+                    placeholder="نام شما" 
                     defaultValue={firstName + " " + lastName}
                   />
-                  <p className="text-red-500 text-sm">{fields.fromName.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.fromName.errors)}</p>
                   <Input 
                     name={fields.fromEmail.name} 
                     key={fields.fromEmail.key} 
-                    placeholder="Your Email" 
+                    placeholder="ایمیل شما" 
                     defaultValue={email}
                   />
-                  <p className="text-red-500 text-sm">{fields.fromEmail.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.fromEmail.errors)}</p>
                   <Input 
                     name={fields.fromAddress.name} 
                     key={fields.fromAddress.key}
-                    placeholder="Your Address" 
+                    placeholder="آدرس شما" 
                     defaultValue={address}
                   />
-                  <p className="text-red-500 text-sm">{fields.fromAddress.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.fromAddress.errors)}</p>
                 </div>
               </div>
               <div>
-                <Label>To</Label>
+                <Label>به</Label>
                 <div className="space-y-2">
                   <Input 
-                    placeholder="Client Name" 
+                    placeholder="نام مشتری" 
                     name={fields.clientName.name}
                     key={fields.clientName.key}
                     defaultValue={fields.clientName.initialValue}
                   />
-                  <p className="text-red-500 text-sm">{fields.clientName.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.clientName.errors)}</p>
                   <Input 
-                    placeholder="Client Email" 
+                    placeholder="ایمیل مشتری" 
                     name={fields.clientEmail.name}
                     key={fields.clientEmail.key} 
                     defaultValue={fields.clientEmail.initialValue}
                   />
-                  <p className="text-red-500 text-sm">{fields.clientEmail.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.clientEmail.errors)}</p>
                   <Input
-                    placeholder="Client Address" 
+                    placeholder="آدرس مشتری" 
                     name={fields.clientAddress.name} 
                     key={fields.clientAddress.key} 
                     defaultValue={fields.clientAddress.initialValue}
                   />
-                  <p className="text-red-500 text-sm">{fields.clientAddress.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.clientAddress.errors)}</p>
                 </div>
               </div>
             </div>
@@ -175,7 +184,7 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <div>
-                  <Label>Date</Label>
+                  <Label>تاریخ صدور</Label>
                 </div>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -185,56 +194,75 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
                     >
                       <CalendarIcon />
                       {selectedDate ? (
-                        new Intl.DateTimeFormat("en-US", {
-                          dateStyle: "long",
-                        }).format(selectedDate)
+                        format(selectedDate, "yyyy MMMM d")
                       ) : (
-                        <span>Pick a date</span>
+                        <span>تاریخ انتخاب کنید</span>
                       )}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent>
                     <Calendar
                       selected={selectedDate}
-                      onSelect={(date) => setSelectedDate(date || new Date())}
+                      onSelect={(date : any) => {
+                        if(selectedDueDate < date) {
+                          setSelectedDueDate(date)
+                        }
+                        setSelectedDate(date || new Date())
+                      }}
                       mode="single"
                       fromDate={new Date()}
+                      disabled={{before: new Date()}}
                     />
                   </PopoverContent>
                 </Popover>
-                <p className="text-red-500 text-sm">{fields.date.errors}</p>
+                <p className="text-red-500 text-sm">{formatError(fields.date.errors)}</p>
               </div>
               <div>
-                <Label>Invoice Due</Label>
-                <Select name={fields.dueDate.name} key={fields.dueDate.key} defaultValue={fields.dueDate.initialValue}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select due date" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Due on Reciept</SelectItem>
-                    <SelectItem value="15">Net 15</SelectItem>
-                    <SelectItem value="30">Net 30</SelectItem>
-                  </SelectContent>
-                </Select> 
-                <p className="text-red-500 text-sm">{fields.dueDate.errors}</p>
+              <div>
+                  <Label>مهلت پرداخت</Label>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-[280px] text-left justify-start"
+                    >
+                      <CalendarIcon />
+                      {selectedDueDate ? (
+                        format(selectedDueDate, "yyyy MMMM d")
+                      ) : (
+                        <span>تاریخ انتخاب کنید</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <Calendar
+                      selected={selectedDueDate}
+                      onSelect={(date : any) => setSelectedDueDate(date || new Date())}
+                      mode="single"
+                      disabled={{before: selectedDate}}
+                    />
+                  </PopoverContent>
+                </Popover>
+                <p className="text-red-500 text-sm">{formatError(fields.dueDate.errors)}</p>
               </div>
             </div>
             <div>
               <div className="grid grid-cols-12 gap-4 mb-2 font-medium">
-                <p className="col-span-6">Description</p>
-                <p className="col-span-2">Quantity</p>
-                <p className="col-span-2">Rate</p>
-                <p className="col-span-2">Amount</p>
+                <p className="col-span-6">توضیحات</p>
+                <p className="col-span-2">تعداد</p>
+                <p className="col-span-2">قیمت هر عدد</p>
+                <p className="col-span-2">حمع کل</p>
               </div>
               <div className="grid grid-cols-12 gap-4 mb-4">
                 <div className="col-span-6">
                   <Textarea 
-                    placeholder="Item name & description" 
+                    placeholder="نام و توضیحات محصول / خدمات" 
                     name={fields.invoiceItemDescription.name} 
                     key={fields.invoiceItemDescription.key} 
                     defaultValue={fields.invoiceItemDescription.initialValue}
                   />
-                  <p className="text-red-500 text-sm ">{fields.invoiceItemDescription.errors}</p>
+                  <p className="text-red-500 text-sm ">{formatError(fields.invoiceItemDescription.errors)}</p>
                 </div>
                 <div className="col-span-2">
                   <Input 
@@ -245,7 +273,7 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
                     type="number" 
                     placeholder="0" 
                   />
-                  <p className="text-red-500 text-sm">{fields.invoiceItemQuantity.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.invoiceItemQuantity.errors)}</p>
                 </div>
                 <div className="col-span-2">
                   <Input 
@@ -256,7 +284,7 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
                     type="number" 
                     placeholder="0" 
                   />
-                  <p className="text-red-500 text-sm">{fields.invoiceItemRate.errors}</p>
+                  <p className="text-red-500 text-sm">{formatError(fields.invoiceItemRate.errors)}</p>
                 </div>
                 <div className="col-span-2">
                   <Input value={formatCurrency({amount: calculateTotal, currency: currency as any})} placeholder="0" disabled />
@@ -266,11 +294,11 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
             <div className="flex justify-end">
               <div className="w-1/3">
                 <div className="flex justify-between py-2">
-                  <span>Subtotal</span>
+                  <span>مبلغ فاکتور</span>
                   <span>{formatCurrency({amount: calculateTotal, currency: currency as any})}</span>
                 </div>
                 <div className="flex justify-between py-2 border-t">
-                  <span>Total ({currency})</span>
+                  <span>مبلغ قابل پرداخت ({currency})</span>
                   <span className="font-medium underline underline-offset-2">
                     {formatCurrency({amount: calculateTotal, currency: currency as any})}
                   </span>
@@ -278,13 +306,13 @@ export default function CreateInvoice({address,firstName,lastName,email} : iAppP
               </div>
             </div>
             <div>
-              <Label>Note</Label>
-              <Textarea name={fields.note.name} key={fields.note.key} defaultValue={fields.note.initialValue} placeholder="Add your Note/s right here..." />
-              <p className="text-red-500 text-sm">{fields.note.errors}</p>
+              <Label>توضیحات</Label>
+              <Textarea name={fields.note.name} key={fields.note.key} defaultValue={fields.note.initialValue} placeholder="اینجا می‌توانید یادداشت اضافه کنید" />
+              <p className="text-red-500 text-sm">{formatError(fields.note.errors)}</p>
             </div>
             <div className="flex items-center justify-end mt-6">
               <div>
-                <SubmitButton text="Send Invoice to Client" />
+                <SubmitButton text="ارسال صورت‌حساب برای مشتری" />
               </div>
             </div>
         </form>

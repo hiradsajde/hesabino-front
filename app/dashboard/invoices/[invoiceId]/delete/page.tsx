@@ -32,21 +32,21 @@ export default async function DeleteInvoiceRoute({params} : {params: Params}) {
         <div className="flex flex-1 justify-center items-center">
             <Card className="max-w-[500px]">
                 <CardHeader>
-                    <CardTitle>Delete Invoice</CardTitle>
+                    <CardTitle>حذف صورت‌حساب</CardTitle>
                     <CardDescription>
-                        Are you sure that you want to delete this invoice?
+                        آیا مطمئن هستید می‌خواهید این صورت‌حساب را پاک کنید؟?
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Image src={WarningGif} alt="Warning Gif" className="rounded-lg"/>
                 </CardContent>
-                <CardFooter className="flex items-center justify-between">
-                    <Link className={buttonVariants({variant: "secondary"})} href="/dashboard/invoices">Cancel</Link>
+                <CardFooter className="flex items-center justify-between flex-row-reverse">
+                    <Link className={buttonVariants({variant: "secondary"})} href="/dashboard/invoices">برگشت</Link>
                     <form action={async () => {
                         "use server"
                         await DeleteInvoice(invoiceId)
                     }}>
-                        <SubmitButton text="Delete Invoice" variant="destructive"/>
+                        <SubmitButton text="مطمئنم" variant="destructive"/>
                     </form>
                 </CardFooter>
             </Card>

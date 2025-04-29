@@ -68,21 +68,18 @@ export default async function DashboardLayout({children} : {children: ReactNode}
                                 </nav>
                             </SheetContent>
                         </Sheet>
-                        <div className="flex items-center ml-auto">
+                        <div className="flex items-center mr-auto">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button className="rounded-full" variant="outline" size="icon">
                                         <User2/>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                <DropdownMenuContent align="start">
+                                    <DropdownMenuLabel className="text-right">حساب‌کاربری من</DropdownMenuLabel>
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem asChild>
-                                        <Link href="/dashboard">Dashboard</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/invoices">Invoices</Link>
+                                        <Link href="/dashboard/profile" className="hover:cursor-pointer text-right justify-end">ویرایش پروفایل</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem asChild>
@@ -90,7 +87,7 @@ export default async function DashboardLayout({children} : {children: ReactNode}
                                             "use server" 
                                             await signOut()
                                         }}>
-                                            <button className="w-full text-left">Logout</button>
+                                            <button className="w-full text-right">خروج</button>
                                         </form>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

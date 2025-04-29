@@ -32,21 +32,21 @@ export default async function MarkAsPaid({params} : {params: Params}) {
         <div className="flex flex-1 justify-center items-center">
             <Card className="max-w-[500px]">
                 <CardHeader>
-                    <CardTitle>Mark as Paid?</CardTitle>
+                    <CardTitle>آیا صورت‌حساب پرداخت شد؟</CardTitle>
                     <CardDescription>
-                        Are you sure you want to mark this invoice as paid?
+                        مطمئنید می‌خواهید صورت‌حساب را به عنوان پرداخت شده علامت‌گذاری کنید؟
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Image src={PaidGif} alt="Paid Gif" className="rounded-lg"/>
                 </CardContent>
-                <CardFooter className="flex justify-between items-center">
-                    <Link href="/dashboard/invoices" className={buttonVariants({variant: "outline"})}>Cancel</Link>
+                <CardFooter className="flex justify-between items-center flex-row-reverse">
+                    <Link href="/dashboard/invoices" className={buttonVariants({variant: "outline"})}>برگشت</Link>
                     <form action={async () => {
                         "use server"
                         await MarkAsPaidAction(invoiceId)
                     }}>
-                        <SubmitButton text="Mark as Paid!"/>
+                        <SubmitButton text="مطمئنم"/>
                     </form>
                 </CardFooter>
             </Card>

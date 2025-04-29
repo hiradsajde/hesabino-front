@@ -31,11 +31,11 @@ export async function RecentInvoices() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Invoices</CardTitle>
+        <CardTitle>آخرین صورت‌حساب‌ها</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-8">
         {data.map((item) => (
-          <div className="flex items-center gap-4" key={item.id}>
+          <div className="flex items-center gap-4 justify-between" key={item.id}>
             <Avatar className="hidden sm:flex size-9">
               <AvatarFallback>{item.clientName.slice(0,2)}</AvatarFallback>
             </Avatar>
@@ -43,10 +43,11 @@ export async function RecentInvoices() {
               <p className="text-sm font-medium leading-none">{item.clientName}</p>
               <p className="text-sm text-muted-foreground">{item.clientEmail}</p>
             </div>
-            <div className="ml-auto font-medium">{formatCurrency({
+            <div className="mr-auto font-medium">{formatCurrency({
                 amount: item.total, 
                 currency: item.currency as any,
-            })}</div>
+            })}
+            </div>
           </div>
         ))}
       </CardContent>

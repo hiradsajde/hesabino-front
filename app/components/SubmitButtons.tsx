@@ -8,13 +8,13 @@ import { useFormStatus } from "react-dom";
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined;
  }
 
-export function SubmitButton({ text = "Submit" , variant} : iAppProps){
+export function SubmitButton({ text = "ارسال" , variant} : iAppProps){
     const { pending } = useFormStatus()
     return (
         <>
             {pending ? (
                 <Button disabled className="w-full">
-                    <Loader2 className="size-4 mr-2 animate-spin"/> Please wait...
+                    <Loader2 className="size-4 mr-2 animate-spin"/> صبر کنید...
                 </Button>
             ) : (
                 <Button type="submit" className="w-full" variant={variant}>{ text }</Button>

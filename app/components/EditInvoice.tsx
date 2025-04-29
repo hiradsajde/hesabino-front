@@ -2,7 +2,6 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +27,9 @@ import { invoiceSchema } from "../utils/zodSchemas";
 import { editInvoice } from "../actions";
 import { formatCurrency } from "../utils/formatCurrency";
 import { Prisma } from "@prisma/client";
+import { formatError } from "../utils/formatError";
+import { format } from "date-fns-jalali";
+import { Calendar } from "@/components/ui/persian-calendar";
 
 interface iAppProps {
   data: Prisma.InvoiceGetPayload<{}>;
@@ -50,6 +52,8 @@ export function EditInvoice({ data }: iAppProps) {
 
 
   const [selectedDate, setSelectedDate] = useState(data.date);
+  const [selectedDueDate, setSelectedDueDate] = useState(data.dueDate);
+
   const [rate, setRate] = useState(data.invoiceItemRate.toString());
   const [quantity, setQuantity] = useState(data.invoiceItemQuantity.toString());
   const [currency, setCurrency] = useState(data.currency);
@@ -59,13 +63,17 @@ export function EditInvoice({ data }: iAppProps) {
     <Card className="w-full max-w-4xl mx-auto">
       <CardContent className="p-6">
         <form id={form.id} action={action} onSubmit={form.onSubmit} noValidate>
+        <input
+            type="hidden"
+            name={fields.dueDate.name}
+            value={selectedDueDate.toISOString()}
+          />
           <input
             type="hidden"
             name={fields.date.name}
             value={selectedDate.toISOString()}
           />
           <input type="hidden" name="id" value={data.id} />
-
           <input
             type="hidden"
             name={fields.total.name}
@@ -74,20 +82,20 @@ export function EditInvoice({ data }: iAppProps) {
 
           <div className="flex flex-col gap-1 w-fit mb-6">
             <div className="flex items-center gap-4">
-              <Badge variant="secondary">Draft</Badge>
+              <Badge variant="secondary">{data.status == "PAID" ? "صورت‌حساب" : "پیش‌نویس"}</Badge>
               <Input
                 name={fields.invoiceName.name}
                 key={fields.invoiceName.key}
                 defaultValue={data.invoiceName}
-                placeholder="Test 123"
+                placeholder="تست 123"
               />
             </div>
-            <p className="text-sm text-red-500">{fields.invoiceName.errors}</p>
+            <p className="text-sm text-red-500">{formatError(fields.invoiceName.errors)}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-6">
             <div>
-              <Label>Invoice No.</Label>
+              <Label>شماره صورت‌حساب</Label>
               <div className="flex">
                 <span className="px-3 border border-r-0 rounded-l-md bg-muted flex items-center">
                   #
@@ -101,12 +109,12 @@ export function EditInvoice({ data }: iAppProps) {
                 />
               </div>
               <p className="text-red-500 text-sm">
-                {fields.invoiceNumber.errors}
+                {formatError(fields.invoiceNumber.errors)}
               </p>
             </div>
 
             <div>
-              <Label>Currency</Label>
+              <Label>ارز مبنا</Label>
               <Select
                 defaultValue="USD"
                 name={fields.currency.name}
@@ -118,76 +126,76 @@ export function EditInvoice({ data }: iAppProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="USD">
-                    United States Dollar
+                    دلار آمریکا
                   </SelectItem>
-                  <SelectItem value="EUR">Euro</SelectItem>
+                  <SelectItem value="EUR">یورو</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-red-500 text-sm">{fields.currency.errors}</p>
+              <p className="text-red-500 text-sm">{formatError(fields.currency.errors)}</p>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
-              <Label>From</Label>
+              <Label>از</Label>
               <div className="space-y-2">
                 <Input
                   name={fields.fromName.name}
                   key={fields.fromName.key}
-                  placeholder="Your Name"
+                  placeholder="نام شما"
                   defaultValue={data.fromName}
                 />
-                <p className="text-red-500 text-sm">{fields.fromName.errors}</p>
+                <p className="text-red-500 text-sm">{formatError(fields.fromName.errors)}</p>
                 <Input
-                  placeholder="Your Email"
+                  placeholder="ایمیل شما"
                   name={fields.fromEmail.name}
                   key={fields.fromEmail.key}
                   defaultValue={data.fromEmail}
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.fromEmail.errors}
+                  {formatError(fields.fromEmail.errors)}
                 </p>
                 <Input
-                  placeholder="Your Address"
+                  placeholder="آدرس شما"
                   name={fields.fromAddress.name}
                   key={fields.fromAddress.key}
                   defaultValue={data.fromAddress}
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.fromAddress.errors}
+                  {formatError(fields.fromAddress.errors)}
                 </p>
               </div>
             </div>
 
             <div>
-              <Label>To</Label>
+              <Label>به</Label>
               <div className="space-y-2">
                 <Input
                   name={fields.clientName.name}
                   key={fields.clientName.key}
                   defaultValue={data.clientName}
-                  placeholder="Client Name"
+                  placeholder="نام مشتری"
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.clientName.errors}
+                  {formatError(fields.clientName.errors)}
                 </p>
                 <Input
                   name={fields.clientEmail.name}
                   key={fields.clientEmail.key}
                   defaultValue={data.clientEmail}
-                  placeholder="Client Email"
+                  placeholder="ایمیل مشتری"
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.clientEmail.errors}
+                  {formatError(fields.clientEmail.errors)}
                 </p>
                 <Input
                   name={fields.clientAddress.name}
                   key={fields.clientAddress.key}
                   defaultValue={data.clientAddress}
-                  placeholder="Client Address"
+                  placeholder="آدرس مشتری"
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.clientAddress.errors}
+                  {formatError(fields.clientAddress.errors)}
                 </p>
               </div>
             </div>
@@ -196,7 +204,7 @@ export function EditInvoice({ data }: iAppProps) {
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
               <div>
-                <Label>Date</Label>
+                <Label>تاریخ صدور</Label>
               </div>
               <Popover>
                 <PopoverTrigger asChild>
@@ -207,52 +215,69 @@ export function EditInvoice({ data }: iAppProps) {
                     <CalendarIcon />
 
                     {selectedDate ? (
-                      new Intl.DateTimeFormat("en-US", {
-                        dateStyle: "long",
-                      }).format(selectedDate)
+                      format(selectedDate, "yyyy MMMM d")
                     ) : (
-                      <span>Pick a Date</span>
+                      <span>انتخاب تاریخ</span>
                     )}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent>
                   <Calendar
                     selected={selectedDate}
-                    onSelect={(date) => setSelectedDate(date || new Date())}
+                    onSelect={(date : any) => {
+                      if(selectedDueDate < date) {
+                        setSelectedDueDate(date)
+                      }
+                      setSelectedDate(date || new Date())
+                    }}
                     mode="single"
                     fromDate={new Date()}
+                    disabled={{before: new Date()}}
                   />
                 </PopoverContent>
               </Popover>
-              <p className="text-red-500 text-sm">{fields.date.errors}</p>
+              <p className="text-red-500 text-sm">{formatError(fields.date.errors)}</p>
             </div>
 
             <div>
-              <Label>Invoice Due</Label>
-              <Select
-                name={fields.dueDate.name}
-                key={fields.dueDate.key}
-                defaultValue={data.dueDate.toString()}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select due date" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0">Due on Reciept</SelectItem>
-                  <SelectItem value="15">Net 15</SelectItem>
-                  <SelectItem value="30">Net 30</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-red-500 text-sm">{fields.dueDate.errors}</p>
+              <div>
+                <Label>تاریخ سررسید</Label>
+              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-[280px] text-left justify-start"
+                  >
+                    <CalendarIcon />
+
+                    {selectedDueDate ? (
+                      format(selectedDueDate, "yyyy MMMM d")
+                    ) : (
+                      <span>تاریخ سررسید</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <Calendar
+                    selected={selectedDueDate}
+                    onSelect={(date: any) => setSelectedDueDate(date || new Date())}
+                    mode="single"
+                    fromDate={new Date()}
+                    disabled={{before: selectedDate}}
+                  />
+                </PopoverContent>
+              </Popover>
+              <p className="text-red-500 text-sm">{formatError(fields.dueDate.errors)}</p>
             </div>
           </div>
 
           <div>
             <div className="grid grid-cols-12 gap-4 mb-2 font-medium">
-              <p className="col-span-6">Description</p>
-              <p className="col-span-2">Quantity</p>
-              <p className="col-span-2">Rate</p>
-              <p className="col-span-2">Amount</p>
+              <p className="col-span-6">توضیحات</p>
+              <p className="col-span-2">تعداد</p>
+              <p className="col-span-2">قیمت هر عدد</p>
+              <p className="col-span-2">جمع کل</p>
             </div>
 
             <div className="grid grid-cols-12 gap-4 mb-4">
@@ -261,10 +286,10 @@ export function EditInvoice({ data }: iAppProps) {
                   name={fields.invoiceItemDescription.name}
                   key={fields.invoiceItemDescription.key}
                   defaultValue={data.invoiceItemDescription}
-                  placeholder="Item name & description"
+                  placeholder="نام و توضیحات محصول"
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.invoiceItemDescription.errors}
+                  {formatError(fields.invoiceItemDescription.errors)}
                 </p>
               </div>
               <div className="col-span-2">
@@ -277,7 +302,7 @@ export function EditInvoice({ data }: iAppProps) {
                   onChange={(e) => setQuantity(e.target.value)}
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.invoiceItemQuantity.errors}
+                  {formatError(fields.invoiceItemQuantity.errors)}
                 </p>
               </div>
               <div className="col-span-2">
@@ -290,7 +315,7 @@ export function EditInvoice({ data }: iAppProps) {
                   placeholder="0"
                 />
                 <p className="text-red-500 text-sm">
-                  {fields.invoiceItemRate.errors}
+                  {formatError(fields.invoiceItemRate.errors)}
                 </p>
               </div>
               <div className="col-span-2">
@@ -308,7 +333,7 @@ export function EditInvoice({ data }: iAppProps) {
           <div className="flex justify-end">
             <div className="w-1/3">
               <div className="flex justify-between py-2">
-                <span>Subtotal</span>
+                <span>مبلغ فاکتور</span>
                 <span>
                   {formatCurrency({
                     amount: calcualteTotal,
@@ -317,7 +342,7 @@ export function EditInvoice({ data }: iAppProps) {
                 </span>
               </div>
               <div className="flex justify-between py-2 border-t">
-                <span>Total ({currency})</span>
+                <span>مبلغ قابل پرداخت ({currency})</span>
                 <span className="font-medium underline underline-offset-2">
                   {formatCurrency({
                     amount: calcualteTotal,
@@ -329,19 +354,19 @@ export function EditInvoice({ data }: iAppProps) {
           </div>
 
           <div>
-            <Label>Note</Label>
+            <Label>متن</Label>
             <Textarea
               name={fields.note.name}
               key={fields.note.key}
               defaultValue={data.note ?? undefined}
-              placeholder="Add your Note/s right here..."
+              placeholder="اینجا می‌توانید توضیحات/متن اضافه کنید"
             />
-            <p className="text-red-500 text-sm">{fields.note.errors}</p>
+            <p className="text-red-500 text-sm">{formatError(fields.note.errors)}</p>
           </div>
 
           <div className="flex items-center justify-end mt-6">
             <div>
-              <SubmitButton text="Update Invoice" />
+              <SubmitButton text="ویرایش صورت‌حساب" />
             </div>
           </div>
         </form>

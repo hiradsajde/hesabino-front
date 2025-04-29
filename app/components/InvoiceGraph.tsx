@@ -58,9 +58,9 @@ export async function InvoiceGraph() {
 
 {            data.length === 0 ? (
                                 <EmptyState
-                                    title="No Paid invoice found"
-                                    description="Mark a invoice as paid to see it right here" 
-                                    buttontext="Explore Invoices" 
+                                    title="صورت‌حساب پرداخت شده ای یافت نشد"
+                                    description="موردی را به عنوان پرداخت شده علامتگذاری کنید تا آن را همینجا ببینید" 
+                                    buttontext="کاوش در صورت‌حساب‌ها" 
                                     href="/dashboard/invoices"
                                     icon={<Receipt className="size-4 mr-2"/>}
                                 />
@@ -68,9 +68,9 @@ export async function InvoiceGraph() {
             ) : (
                 <>
                 <CardHeader>
-                    <CardTitle>Paid Invoices</CardTitle>
+                    <CardTitle>نمودار درآمدی</CardTitle>
                     <CardDescription>
-                        Invoices wich have beem paid in the last 30 days.
+                        بر اساس صورت‌حساب های پرداخت شده یک ماه اخیر
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
