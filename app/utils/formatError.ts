@@ -8,6 +8,5 @@ export function formatError(errors: string[] = [""]) {
     errors = Object.entries(replaces).reduce((acc , [key , value]) => {
         return errors.map((error: string) => error.replace(key , value))
     }, errors)
-    console.log(errors) 
     return errors
 }

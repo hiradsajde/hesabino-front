@@ -28,8 +28,8 @@ export default function Onboarding() {
         <div className="min-h-screen w-screen flex items-center justify-center">
             <Card className="max-w-sm mx-auto">
                 <CardHeader>
-                    <CardTitle className="text-xl">You are almost finished</CardTitle>
-                    <CardDescription>Enter yout information to create an account</CardDescription>
+                    <CardTitle className="text-xl">آخر خطه...</CardTitle>
+                    <CardDescription>اطلاعات خود را جهت ساخت اکانت وارد کنید</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form 
@@ -41,20 +41,20 @@ export default function Onboarding() {
                     >
                         <div className="grid grid-cols-2 gap-4">
                             <div className="flex flex-col gap-2">
-                                <Label>First Name</Label>
+                                <Label>نام</Label>
                                 <Input 
                                     name={fields.firstName.name} 
                                     key={fields.firstName.key}
                                     defaultValue={fields.firstName.initialValue}
-                                    placeholder="John"
+                                    placeholder="آرام"
                                 />
                                 <p className="text-red-500 text-sm">{fields.firstName.errors}</p>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <Label>Last Name</Label>
+                                <Label>نام خانوادگی</Label>
                                 <Input
                                     name={fields.lastName.name} 
-                                    placeholder="Doe"
+                                    placeholder="رضایی"
                                     key={fields.lastName.key}
                                     defaultValue={fields.lastName.initialValue}
                                 />
@@ -62,16 +62,16 @@ export default function Onboarding() {
                             </div>
                         </div>
                         <div>
-                            <Label>Address</Label>
+                            <Label>آدرس</Label>
                             <Input 
                                 name={fields.address.name} 
                                 key={fields.address.key}
                                 defaultValue={fields.address.initialValue} 
-                                placeholder="Chad street 123"
+                                placeholder="خیابان شاد ۱۲۳"
                             />
                             <p className="text-red-500 text-sm">{fields.address.errors}</p>
                         </div>
-                        <SubmitButton text="Finish onboarding"/>
+                        <SubmitButton text="ثبت‌نام"/>
                     </form>
                 </CardContent>
             </Card>

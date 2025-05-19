@@ -37,12 +37,12 @@ export function InvoiceActions({ id , status} : iAppProps) {
             <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
                     <Link href={`/dashboard/invoices/${id}`}>
-                        <Pencil className="size-4 mr-2"/> ویرایش صورت‌حساب
+                        <Pencil className="size-4 mr-2"/> ویرایش فاکتور
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
                     <Link href={`/api/invoice/${id}`} target="_blank">
-                        <DownloadCloudIcon className="size-4 mr-2"/> دانلود صورت‌حساب
+                        <DownloadCloudIcon className="size-4 mr-2"/> دانلود فاکتور
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSetReminder} className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
@@ -50,7 +50,7 @@ export function InvoiceActions({ id , status} : iAppProps) {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="justify-start flex-row-reverse hover:cursor-pointer gap-1">
                     <Link href={`/dashboard/invoices/${id}/delete`}>
-                    <Trash className="size-4 mr-2"/>  حذف صورت‌حساب
+                    <Trash className="size-4 mr-2"/>  حذف فاکتور
                     </Link>
                 </DropdownMenuItem>
                 {

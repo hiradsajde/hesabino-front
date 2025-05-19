@@ -24,9 +24,9 @@ model User {
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
-  Authenticator Authenticator[] 
+  Authenticator Authenticator[]
   invoices      Invoice[]
-
+  currencyName  CurrencyISO @default(IRR)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -86,6 +86,14 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+model Curency {
+  id           String   @id @default(uuid())
+  currencyName String   @unique
+  value        Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model Invoice {
   id                     String        @id @default(uuid())
   invoiceName            String
@@ -100,18 +108,31 @@ model Invoice {
   clientAddress          String
   clientEmail            String
   currency               String
+  items InvoiceItems[]
   invoiceNumber          Int
   note                   String?
-  invoiceItemDescription String
-  invoiceItemQuantity    Int
-  invoiceItemRate        Int
-  User User? @relation(fields: [userId], references: [id])
-  userId String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  User                   User?         @relation(fields: [userId], references: [id])
+  userId                 String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+}
+
+model InvoiceItems {
+  id String @id @default(uuid())
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String 
+  Title String
+  Quantity    Int
+  Rate        Int
 }
 
 enum InvoiceStatus {
   PAID
   PENDING
+}
+
+enum CurrencyISO {
+  IRR 
+  EUR
+  USD
 }

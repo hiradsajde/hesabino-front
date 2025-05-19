@@ -1,9 +1,9 @@
 import { z } from "zod"
 
 export const onboardingSchema = z.object({
-    firstName: z.string().min(2, "First name is required"),
-    lastName: z.string().min(2,"Last name is required"), 
-    address: z.string().min(2 , "Address is required"), 
+    firstName: z.string({message: "نام اجباری است"}).min(2, "نام اجباری است"),
+    lastName: z.string({message: "نام خانوادگی اجباری است"}).min(2,"نام خانوادگی اجباری است"), 
+    address: z.string({message: "آدرس اجباری است"}).min(2 , "آدرس اجباری است"), 
 })
 
 export const invoiceSchema = z.object({
@@ -21,7 +21,10 @@ export const invoiceSchema = z.object({
     currency: z.string().min(1, "Currency is required"), 
     invoiceNumber: z.number().min(1, "Minimum invoice number of 1"), 
     note: z.string().optional(),
+}) 
+
+export const productSchema = z.object({
     invoiceItemDescription: z.string().min(1, "Description is required"), 
     invoiceItemQuantity: z.number().min(1, "Quantity min 1"), 
-    invoiceItemRate: z.number().min(1,"Rate min 1")
-}) 
+    invoiceItemRate: z.array(z.coerce.number().min(1,"Rate min 1"))
+})

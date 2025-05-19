@@ -26,9 +26,9 @@ export default async function DashboardRoute(){
         <>
             {data.length < 1 ? (
                 <EmptyState
-                    title="No invoices found"
-                    description="Create an invoice to see it right here" 
-                    buttontext="Create Invoice" 
+                    title="فاکتوری پیدا نشد"
+                    description="اینجا می‌توانید فاکتور های خود را ببینید" 
+                    buttontext="ساخت فاکتور" 
                     href="/dashboard/invoices/create"
                 />
             ) : (

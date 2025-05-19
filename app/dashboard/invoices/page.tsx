@@ -12,11 +12,11 @@ export default function InvoicesRoute() {
             <CardHeader> 
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-2xl font-bold">صورت‌حساب‌ها</CardTitle>
-                        <CardDescription>صورت‌حساب های خود را اینجا مدیریت کنید</CardDescription>
+                        <CardTitle className="text-2xl font-bold">فاکتور‌ها</CardTitle>
+                        <CardDescription>فاکتور های خود را اینجا مدیریت کنید</CardDescription>
                     </div>
                     <Link href="/dashboard/invoices/create" className={buttonVariants()}>
-                        <PlusIcon/> ساخت صورت‌حساب
+                        <PlusIcon/> ساخت فاکتور
                     </Link>
                 </div>
             </CardHeader>

@@ -32,9 +32,9 @@ export default async function MarkAsPaid({params} : {params: Params}) {
         <div className="flex flex-1 justify-center items-center">
             <Card className="max-w-[500px]">
                 <CardHeader>
-                    <CardTitle>آیا صورت‌حساب پرداخت شد؟</CardTitle>
+                    <CardTitle>آیا فاکتور پرداخت شد؟</CardTitle>
                     <CardDescription>
-                        مطمئنید می‌خواهید صورت‌حساب را به عنوان پرداخت شده علامت‌گذاری کنید؟
+                        مطمئنید می‌خواهید فاکتور را به عنوان پرداخت شده علامت‌گذاری کنید؟
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

@@ -25,11 +25,12 @@ import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { invoiceSchema } from "../utils/zodSchemas";
 import { editInvoice } from "../actions";
-import { formatCurrency } from "../utils/formatCurrency";
+import { convertCurrency, formatCurrency } from "../utils/formatCurrency";
 import { Prisma } from "@prisma/client";
 import { formatError } from "../utils/formatError";
 import { format } from "date-fns-jalali";
 import { Calendar } from "@/components/ui/persian-calendar";
+import { prisma } from "../utils/db";
 
 interface iAppProps {
   data: Prisma.InvoiceGetPayload<{}>;
@@ -56,9 +57,10 @@ export function EditInvoice({ data }: iAppProps) {
 
   const [rate, setRate] = useState(data.invoiceItemRate.toString());
   const [quantity, setQuantity] = useState(data.invoiceItemQuantity.toString());
+  const [total , setTotal] = useState(data.total)
   const [currency, setCurrency] = useState(data.currency);
 
-  const calcualteTotal = (Number(quantity) || 0) * (Number(rate) || 0);
+  
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardContent className="p-6">
@@ -77,12 +79,12 @@ export function EditInvoice({ data }: iAppProps) {
           <input
             type="hidden"
             name={fields.total.name}
-            value={calcualteTotal}
+            value={total}
           />
 
           <div className="flex flex-col gap-1 w-fit mb-6">
             <div className="flex items-center gap-4">
-              <Badge variant="secondary">{data.status == "PAID" ? "صورت‌حساب" : "پیش‌نویس"}</Badge>
+              <Badge variant="secondary">{data.status == "PAID" ? "فاکتور" : "پیش‌نویس"}</Badge>
               <Input
                 name={fields.invoiceName.name}
                 key={fields.invoiceName.key}
@@ -95,7 +97,7 @@ export function EditInvoice({ data }: iAppProps) {
 
           <div className="grid md:grid-cols-3 gap-6 mb-6">
             <div>
-              <Label>شماره صورت‌حساب</Label>
+              <Label>شماره فاکتور</Label>
               <div className="flex">
                 <span className="px-3 border border-r-0 rounded-l-md bg-muted flex items-center">
                   #
@@ -116,18 +118,28 @@ export function EditInvoice({ data }: iAppProps) {
             <div>
               <Label>ارز مبنا</Label>
               <Select
-                defaultValue="USD"
+                defaultValue={data.currency}
                 name={fields.currency.name}
                 key={fields.currency.key}
-                onValueChange={(value) => setCurrency(value)}
+                onValueChange={async (value) => {
+                  const res = await fetch("/api/currency", {
+                    method: "POST", 
+                    body: JSON.stringify({
+                      fromValue: Number(quantity) * Number(rate), 
+                      fromCurrencyName: data.currency, 
+                      toCurrencyName: value
+                    })
+                  }).then(res => res.json()) 
+                  setTotal(res.value)
+                  setCurrency(value)
+                }}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select Currency" />
+                  <SelectValue placeholder="انتخاب ارز" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="USD">
-                    دلار آمریکا
-                  </SelectItem>
+                  <SelectItem value="IRR">تومان</SelectItem>
+                  <SelectItem value="USD">دلار آمریکا</SelectItem>
                   <SelectItem value="EUR">یورو</SelectItem>
                 </SelectContent>
               </Select>
@@ -299,7 +311,10 @@ export function EditInvoice({ data }: iAppProps) {
                   type="number"
                   placeholder="0"
                   value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+                  onChange={(e) => {
+                    setQuantity(e.target.value)
+                    setTotal((Number(e.target.value) || 0) * (Number(rate) || 0));
+                  }}
                 />
                 <p className="text-red-500 text-sm">
                   {formatError(fields.invoiceItemQuantity.errors)}
@@ -310,7 +325,10 @@ export function EditInvoice({ data }: iAppProps) {
                   name={fields.invoiceItemRate.name}
                   key={fields.invoiceItemRate.key}
                   value={rate}
-                  onChange={(e) => setRate(e.target.value)}
+                  onChange={(e) => {
+                    setRate(e.target.value)
+                    setTotal((Number(quantity) || 0) * (Number(e.target.value) || 0));
+                  }}
                   type="number"
                   placeholder="0"
                 />
@@ -321,7 +339,7 @@ export function EditInvoice({ data }: iAppProps) {
               <div className="col-span-2">
                 <Input
                   value={formatCurrency({
-                    amount: calcualteTotal,
+                    amount: total,
                     currency: currency as any,
                   })}
                   disabled
@@ -336,16 +354,16 @@ export function EditInvoice({ data }: iAppProps) {
                 <span>مبلغ فاکتور</span>
                 <span>
                   {formatCurrency({
-                    amount: calcualteTotal,
+                    amount: total,
                     currency: currency as any,
                   })}
                 </span>
               </div>
               <div className="flex justify-between py-2 border-t">
-                <span>مبلغ قابل پرداخت ({currency})</span>
+                <span>مبلغ قابل پرداخت ({currency.replace("IRR","IRT")})</span>
                 <span className="font-medium underline underline-offset-2">
                   {formatCurrency({
-                    amount: calcualteTotal,
+                    amount: total,
                     currency: currency as any,
                   })}
                 </span>
@@ -366,7 +384,7 @@ export function EditInvoice({ data }: iAppProps) {
 
           <div className="flex items-center justify-end mt-6">
             <div>
-              <SubmitButton text="ویرایش صورت‌حساب" />
+              <SubmitButton text="ویرایش فاکتور" />
             </div>
           </div>
         </form>

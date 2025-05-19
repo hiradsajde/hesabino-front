@@ -14,7 +14,7 @@ export const dashboardLinks = [
     }, 
     {
         id: 1, 
-        name: 'صورت‌حساب‌ها', 
+        name: 'فاکتور‌ها', 
         href: '/dashboard/invoices',
         icon: ReceiptText
     }

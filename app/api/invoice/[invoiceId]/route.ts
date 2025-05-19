@@ -69,7 +69,7 @@ export async function GET(request: Request,{params} : {params: Promise<{invoiceI
 
     // Invocie details
     pdf.setFontSize(10) 
-    pdf.text(`شناسه صورت‌حساب: #${data.invoiceNumber}`, 90, 40, {align: "right"})
+    pdf.text(`شناسه فاکتور: #${data.invoiceNumber}`, 90, 40, {align: "right"})
     pdf.text(`تاریخ صدور: ${format(new Date(data.date), "yyyy MMMM d")}`, 90, 45, {align: "right"})
     pdf.text(`تاریخ سررسید: ${format(new Date(data.dueDate), "yyyy MMMM d")}`, 90, 50, {align: "right"})
 

@@ -43,9 +43,9 @@ export async function InvoiceList() {
     <>
     {data.length === 0 ? (
         <EmptyState
-            title="صورت‌حساب ای پیدا نشد" 
-            description="برای شروع صورت‌حساب جدیدی بسازید" 
-            buttontext="ساخت صورت حساب" 
+            title="فاکتور ای پیدا نشد" 
+            description="برای شروع فاکتور جدیدی بسازید" 
+            buttontext="ساخت فاکتور" 
             href="/dashboard/invoices/create"
         />
     ) : (

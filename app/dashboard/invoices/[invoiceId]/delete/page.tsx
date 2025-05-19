@@ -32,9 +32,9 @@ export default async function DeleteInvoiceRoute({params} : {params: Params}) {
         <div className="flex flex-1 justify-center items-center">
             <Card className="max-w-[500px]">
                 <CardHeader>
-                    <CardTitle>حذف صورت‌حساب</CardTitle>
+                    <CardTitle>حذف فاکتور</CardTitle>
                     <CardDescription>
-                        آیا مطمئن هستید می‌خواهید این صورت‌حساب را پاک کنید؟?
+                        آیا مطمئن هستید می‌خواهید این فاکتور را پاک کنید؟?
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
