@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
+import { RootProvider } from 'fumadocs-ui/provider';
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const vazirmatn = Vazirmatn({ subsets: ["latin"] });
 
@@ -15,8 +17,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={vazirmatn.className}>{children}</body>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={vazirmatn.className}>
+         <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+          <RootProvider>
+            {children}
+          </RootProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
