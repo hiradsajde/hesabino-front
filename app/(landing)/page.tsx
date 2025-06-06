@@ -11,7 +11,6 @@ import Cta from "@/app/(landing)/components/Cta"
 
 function App() {
   return (
-    <ReactLenis root>
       <div className="relative isolate overflow-hidden">
         <main>
           <Hero/>
@@ -24,7 +23,6 @@ function App() {
           <Cta/>
         </main>
       </div>
-    </ReactLenis>
   )
 }
 
